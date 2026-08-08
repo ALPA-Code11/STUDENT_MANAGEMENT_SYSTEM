@@ -10,6 +10,7 @@ from app.models.role_permission_model import role_permission_model
 # Routers import karein
 from app.api.auth import router as auth_router  
 from app.api.admin import router as admin_router  
+from app.api.pagination import router as users_router
 
 app = FastAPI(
     title="Student Management System API",
@@ -29,6 +30,7 @@ app.add_middleware(
 # Dono routers link kiye
 app.include_router(auth_router)
 app.include_router(admin_router)
+app.include_router(users_router)
 
 @app.get("/")
 def home():
