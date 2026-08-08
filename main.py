@@ -11,8 +11,8 @@ from app.models.role_permission_model import role_permission_model
 from app.api.auth import router as auth_router  
 from app.api.admin import router as admin_router  
 from app.api.pagination import router as users_router
-
 from app.api.pagination import router as search_router
+from app.api.pagination import router as sorting_router 
 
 app = FastAPI(
     title="Student Management System API",
@@ -33,8 +33,8 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(admin_router)
 app.include_router(users_router)
-# main.py mein niche jahan app.include_router likha hai
 app.include_router(search_router)
+app.include_router(sorting_router)
 @app.get("/")
 def home():
     return {"message": "Welcome to Student Management System API! Server ekdam mast chal raha hai."}
