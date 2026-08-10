@@ -11,8 +11,8 @@ from app.models.role_permission_model import role_permission_model
 from app.api.auth import router as auth_router  
 from app.api.admin import router as admin_router  
 from app.api.pagination import router as users_router
-from app.api.pagination import router as search_router
-from app.api.pagination import router as sorting_router 
+from app.api.searching import router as search_router
+from app.api.sorting import router as sorting_router 
 
 app = FastAPI(
     title="Student Management System API",
