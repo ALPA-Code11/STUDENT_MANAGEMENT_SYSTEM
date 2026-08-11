@@ -4,6 +4,7 @@ from database import get_db
 from jose import jwt
 import os
 from datetime import datetime, timedelta
+from app.core.rate_limiter import rate_limit
 
 
 from app.models.user_model import User
@@ -99,7 +100,7 @@ def register_student(ud:userregister, db: Session = Depends(get_db)):
 
 
 
-@router.post("/login")
+@router.post("/login",dependencies=[Depends(rate_limit)])
 def login(form_data: userlogin, db: Session = Depends(get_db)):
     # 1. User ko database mein dhundhein
     user = db.query(User).filter(User.username == form_data.username).first()
@@ -113,6 +114,8 @@ def login(form_data: userlogin, db: Session = Depends(get_db)):
     # 3. Access Token aur Refresh Token generate karein (deps.py ke functions use karke)
     access_token = create_access_token({"sub": user.username})
     refresh_token = create_refresh_token({"sub": user.username})
+
+    user_role = user.role.role_name.lower() if user.role else "student"
     
     # 4. Refresh Token ko Database mein save karein (Expiry date ke sath - maan lijiye 7 din)
     expires_at = datetime.utcnow() + timedelta(days=7)
@@ -124,11 +127,14 @@ def login(form_data: userlogin, db: Session = Depends(get_db)):
     )
     db.add(db_refresh_token)
     db.commit()
+
+
     
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
         "token_type": "bearer",
+        "role": user_role,
         "message": "Login successful!"
     }
 
