@@ -13,6 +13,8 @@ from app.api.admin import router as admin_router
 from app.api.pagination import router as users_router
 from app.api.searching import router as search_router
 from app.api.sorting import router as sorting_router 
+from app.api.students import router as student_router  
+from app.api.teachers import router as teacher_router
 
 app = FastAPI(
     title="Student Management System API",
@@ -23,7 +25,7 @@ app = FastAPI(
 # 👈 2. Yahan CORS Middleware add karein (App initialization ke turant baad)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5174"],  # React ka URL allow kiya
+    allow_origins=["http://localhost:5173"],  # React ka URL allow kiya
     allow_credentials=True,
     allow_methods=["*"],  # Saare methods (GET, POST, etc.) allow hain
     allow_headers=["*"],  # Saare headers allow hain
@@ -35,6 +37,10 @@ app.include_router(admin_router)
 app.include_router(users_router)
 app.include_router(search_router)
 app.include_router(sorting_router)
+app.include_router(student_router)
+app.include_router(teacher_router)
+
+
 @app.get("/")
 def home():
     return {"message": "Welcome to Student Management System API! Server ekdam mast chal raha hai."}
